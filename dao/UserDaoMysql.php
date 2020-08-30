@@ -28,7 +28,7 @@ class UserDaoMysql implements UserDAO {
         if ($full) {
             $urDaoMysql = new UserRelationDaoMysql($this->pdo);
             $postDaoMysql = new PostDaoMysql($this->pdo);
-            
+
             // Followers -> quem segue o usuário
             $u->followers = $urDaoMysql->getFollowers($u->id);
 
@@ -98,6 +98,24 @@ class UserDaoMysql implements UserDAO {
             }
         }
         return false;
+    }
+
+    public function findByName($name) {
+        $array = [];
+        if (!empty($name)) {
+            $sql = $this->pdo->prepare("SELECT * FROM users WHERE name LIKE :name");
+            $sql->bindValue(':name', '%' . $name . '%');
+            $sql->execute();
+
+            if ($sql->rowCount() > 0) {
+                $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($data AS $item) {
+                    $array[] = $this->generateUser($item);
+                }
+            }
+        }
+        return $array;
     }
 
     public function update(User $u) {

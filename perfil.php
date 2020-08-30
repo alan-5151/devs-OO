@@ -1,6 +1,6 @@
 <?php
-require 'config.php';
-require 'models/Auth.php';
+require_once 'config.php';
+require_once 'models/Auth.php';
 require_once 'dao/PostDaoMysql.php';
 
 $auth = new Auth($pdo, $base);
@@ -155,18 +155,21 @@ require 'partials/menu.php';
 
 
                     <?php if (count($user->photos) > 0): ?>
-                        <?php foreach ($user->photos AS $item): ?>
+                        <?php foreach ($user->photos AS $key => $item): ?>
 
                             <div class="user-photo-item">
-                                <a href="#modal-1" rel="modal:open">
-                                    <img src="<?=$base;?>/media/uploads/<?=$item->body;?>" />
+                                <a href="#modal-<?= $key; ?>" rel="modal:open">
+                                    <img src="<?= $base; ?>/media/uploads/<?= $item->body; ?>" />
                                 </a>
-                                <div id="modal-1" style="display:none">
-                                    <img src="<?=$base;?>/media/uploads/<?=$item->body;?>" />
+                                <div id="modal-<?= $key; ?>" style="display:none">
+                                    <img src="<?= $base; ?>/media/uploads/<?= $item->body; ?>" />
                                 </div>
                             </div>
 
                         <?php endforeach; ?>
+                    <?php endif; ?>
+                    <?php if (count($user->photos) === 0): ?>
+                        Você ainda não postou fotos!...
                     <?php endif; ?>
 
                 </div>

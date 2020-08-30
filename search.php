@@ -1,15 +1,22 @@
 <?php
 require_once 'config.php';
 require_once 'models/Auth.php';
-require_once 'dao/PostDaoMysql.php';
+require_once 'dao/UserDaoMysql.php';
 
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $firstName = current(explode(' ', $userInfo->name));
-$activeMenu = 'home';
 
-$postDao = new PostDaoMysql($pdo);
-$feed = $postDao->getHomeFeed($userInfo->id);
+$userDao = new UserDaoMysql($pdo);
+
+$searchTerm = filter_input(INPUT_GET, 's');
+
+if (empty($searchTerm)) {
+    header("location:javascript://history.go(-1)");
+    exit();
+}
+
+$userList = $userDao->findByName($searchTerm);
 
 require 'partials/header.php';
 require 'partials/menu.php';
@@ -19,11 +26,22 @@ require 'partials/menu.php';
     <div class="row">
 
         <div class="column pr-5">
-            <?php require 'partials/feed-editor.php'; ?>
+            <h3>Pesquisa por: <?= $searchTerm; ?></h3>
+            <div class="full-friend-list">
+                <?php foreach ($userList AS $item): ?>
+                    <div class="friend-icon">
+                        <a href="<?= $base; ?>/perfil.php?id=<?= $item->id; ?>">
+                            <div class="friend-icon-avatar">
+                                <img src="<?= $base; ?>/media/avatars/<?= $item->avatar ?>" title="<?= $item->name ?>/ <?= $item->city ?>" />
+                            </div>
+                            <div class="friend-icon-name">
+                                <?= $item->name ?>
+                            </div>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
-            <?php foreach ($feed AS $item): ?>
-                <?php require 'partials/feed-item.php'; ?>
-            <?php endforeach; ?>
 
         </div>
 
@@ -47,8 +65,13 @@ require 'partials/menu.php';
                     Criado com ❤️ por B7Web
                 </div>
             </div>
+
         </div>
+
+
     </div>
+
+
 </section>
 
 <?php
