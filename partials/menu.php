@@ -1,4 +1,14 @@
 <aside class="mt-10">
+    
+    <a href="#" class="user-area">
+        <div class="user-area-icon">
+            <img src="<?= $base; ?>/media/avatars/<?= $userInfo->avatar; ?>" />
+        </div>
+        <div class="profile-info-name" style="text-decoration: none; color: #999; font-size: 14px;"><?= $firstName; ?></div>
+    </a>
+    <div class="menu-splitter"></div>
+    
+    
     <nav>
         <a href="<?= $base; ?>">
             <div class="menu-item <?= $activeMenu == 'home' ? 'active' : ''; ?>">

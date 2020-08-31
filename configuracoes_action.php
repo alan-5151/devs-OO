@@ -19,18 +19,6 @@ $work = filter_input(INPUT_POST, 'work', FILTER_SANITIZE_SPECIAL_CHARS);
 $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 $password_confirmation = filter_input(INPUT_POST, 'password_confirmation', FILTER_SANITIZE_SPECIAL_CHARS);
 
-
-//echo "Nome: ".$name."<br>";
-//echo "Email: ".$email."<br>";
-//echo "Birthdate: ".$birthdate."<br>";
-//echo "City: ".$city."<br>";
-//echo "Work: ".$work."<br>";
-//echo "Senha: ".$password."<br>";
-//echo "Conf. senha: ".$password_confirmation."<br>";
-//exit();
-
-
-
 if ($name && $email) {
     $userInfo->name = $name;
     $userInfo->city = $city;
@@ -89,55 +77,32 @@ if ($name && $email) {
 
     if (isset($_FILES['avatar']) && !empty($_FILES['avatar']['tmp_name'])) {
         $newAvatar = $_FILES['avatar'];
-        // $oldAvatar = UserHandler::limpaAvatar($id);
         $oldAvatar = $userInfo->avatar;
-        
-//        echo "<pre>";
-//        print_r($newAvatar);   
-
-
         if (in_array($newAvatar['type'], ['image/jpeg', 'image/jpg', 'image/png'])) {
             $avatarName = cutImage($newAvatar, 200, 200, 'media/avatars');
-           // $new_avatar = $avatarName;
-            
-              
-//        echo "<pre>";
-//        print_r($avatarName);
-//        exit;
-            
-            
-           $userInfo->avatar = $avatarName;
-                    
+            $userInfo->avatar = $avatarName;
 
             if ($oldAvatar != 'default.jpg') {
                 unlink("media/avatars/$oldAvatar");
             }
         }
     }
-    
-    
-    
-     // Cover
+
+    // Cover
 
     if (isset($_FILES['cover']) && !empty($_FILES['cover']['tmp_name'])) {
         $newCover = $_FILES['cover'];
-        // $oldAvatar = UserHandler::limpaAvatar($id);
         $oldCover = $userInfo->cover;
-
 
         if (in_array($newCover['type'], ['image/jpeg', 'image/jpg', 'image/png'])) {
             $coverName = cutImage($newCover, 850, 313, 'media/covers');
             $userInfo->cover = $coverName;
 
             if ($oldAvatar != 'default.jpg') {
-                unlink("media/avatars/$oldAvatar");
+                unlink("media/covers/$oldCover");
             }
         }
     }
-    
-
-
-
 
     $userDao->update($userInfo);
 }

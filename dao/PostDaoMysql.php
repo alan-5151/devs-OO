@@ -3,6 +3,8 @@
 require_once 'models/Post.php';
 require_once 'dao/UserRelationDaoMysql.php';
 require_once 'dao/UserDaoMysql.php';
+require_once 'dao/PostLikeDaoMysql.php';
+require_once 'dao/PostCommentDaoMysql.php';
 
 class PostDaoMysql implements PostDAO {
 
@@ -24,24 +26,23 @@ class PostDaoMysql implements PostDAO {
 
         return true;
     }
-    
-    
+
     public function getUserFeed($id_user) {
         $array = [];
-       
+
         $sql = $this->pdo->prepare("SELECT * FROM posts"
                 . " WHERE id_user = :id_user"
                 . " ORDER BY created_at DESC ");
         $sql->bindValue(':id_user', $id_user);
         $sql->execute();
-        
-         
+
+
 
         if ($sql->rowCount() > 0) {
             $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-            
-            
-           
+
+
+
 
             // 3. Transformar o resultado em objetos
             $array = $this->_postListToObject($data, $id_user);
@@ -72,25 +73,26 @@ class PostDaoMysql implements PostDAO {
 
     public function getPhotosFrom($id_user) {
         $array = [];
-        
+
         $sql = $this->pdo->prepare("SELECT * FROM posts"
                 . "WHERE id_user = :id_user AND type = 'photo'"
                 . "ORDER BY created_at DESC");
         $sql->bindValue(':id_user', $id_user);
         $sql->execute();
-        
+
         if ($sql->rowCount() > 0) {
             $data = $sql->fetchAll(PDO::FETCH_ASSOC);
             $array = $this->_postListToObject($data, $id_user);
         }
-        
+
         return $array;
     }
-    
-    
+
     private function _postListToObject($post_list, $id_user) {
         $posts = [];
         $userDao = new UserDaoMysql($this->pdo);
+        $postLikeDao = new PostLikeDaoMysql($this->pdo);
+        $postCommentDao = new PostCommentDaoMysql($this->pdo);
 
         foreach ($post_list AS $post_item) {
             $newPost = new Post();
@@ -110,13 +112,12 @@ class PostDaoMysql implements PostDAO {
 
 
             // Informações sobre LIKE
-            $newPost->likeCount = 0;
-            $newPost->liked = false;
+            $newPost->likeCount = $postLikeDao->getLikeCount($newPost->id);
+            $newPost->liked = $postLikeDao->isLiked($newPost->id, $id_user);
 
 
             // Informações sobre COMMENT
-            $newPost->comments = [];
-
+            $newPost->comments = $postCommentDao->getComments($newPost->id);
 
             $posts[] = $newPost;
         }

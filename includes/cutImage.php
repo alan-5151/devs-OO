@@ -12,16 +12,10 @@ function cutImage($file, $w, $h, $folder) {
             $newWidth = $newHeight * $ratio;
         }
 
-
-
         $x = $w - $newWidth;
         $y = $h - $newHeight;
         $x = $x < 0 ? $x / 2 : $x;
         $y = $y < 0 ? $y / 2 : $y;
-
-
-
-
 
         $finalImage = imagecreatetruecolor($w, $h);
         switch ($file['type']) {

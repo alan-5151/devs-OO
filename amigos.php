@@ -98,7 +98,7 @@ require 'partials/menu.php';
                                     <div class="friend-icon">
                                 <a href="<?= $base; ?>/perfil.php?id=<?= $item->id; ?>">
                                     <div class="friend-icon-avatar">
-                                        <img src="<?= $base; ?>/media/avatars/<?= $item->avatar ?>" />
+                                        <img src="<?= $base; ?>/media/avatars/<?= $item->avatar; ?>" title="<?= $item->name; ?> / <?= $item->city; ?>" alt="" />
                                     </div>
                                     <div class="friend-icon-name">
                                         <?= $item->name ?>
@@ -121,7 +121,7 @@ require 'partials/menu.php';
                                     <div class="friend-icon">
                                 <a href="<?= $base; ?>/perfil.php?id=<?= $item->id; ?>">
                                     <div class="friend-icon-avatar">
-                                        <img src="<?= $base; ?>/media/avatars/<?= $item->avatar ?>" />
+                                        <img src="<?= $base; ?>/media/avatars/<?= $item->avatar ?>"  title="<?= $item->name; ?> / <?= $item->city; ?>" alt="" />
                                     </div>
                                     <div class="friend-icon-name">
                                         <?= $item->name ?>
