@@ -78,7 +78,7 @@ require 'partials/menu.php';
                 <div class="box-body">
 
                     <div class="full-user-photos">
-                        <?php foreach ($user->photos AS $key => $Item): ?>
+                        <?php foreach ($user->photos AS $key => $item): ?>
                             <div class="user-photo-item">
                                 <a href="#modal-<?= $key; ?>" rel="modal:open">
                                     <img src="<?= $base; ?>/media/uploads/<?= $item->body; ?>" />

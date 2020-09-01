@@ -84,12 +84,13 @@
 
 .fic-item-photo {
     margin-right: 10px;
-}
+    width: 8%;
+    }
 .fic-item-photo img {
     width:35px;
     height:35px;
     border-radius:50%;
-}
+    }
 .fic-item-info a {
     display:block;
     margin-bottom:5px;
@@ -101,6 +102,7 @@
     color:#333;
     font-size:13px;
     font-style: italic;
+    width: 92%;
 }
 .fic-item-field {
     flex:1;
