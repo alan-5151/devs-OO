@@ -27,6 +27,32 @@ class PostDaoMysql implements PostDAO {
         return true;
     }
 
+    public function delete($id, $id_user) {
+
+        $foto = [];
+        $foto = $this->delPhotosFrom($id, $id_user);
+
+        if ($foto) {
+            $teste = $foto['body'];
+            unlink("media/uploads/$teste");
+        }
+        
+        $sql = $this->pdo->prepare("DELETE FROM posts WHERE id = :id AND id_user = :id_user LIMIT 1");
+        $sql->bindValue(':id', $id);
+        $sql->bindValue(':id_user', $id_user);
+        $sql->execute();
+
+
+        $sql2 = $this->pdo->prepare("DELETE FROM postcomments WHERE id_post = :id_post");
+        $sql2->bindValue(':id_post', $id);
+        $sql2->execute();
+
+
+        $sql3 = $this->pdo->prepare("DELETE FROM postlikes WHERE id_post = :id_post");
+        $sql3->bindValue(':id_post', $id);
+        $sql3->execute();
+    }
+
     public function getUserFeed($id_user) {
         $array = [];
 
@@ -40,8 +66,6 @@ class PostDaoMysql implements PostDAO {
 
         if ($sql->rowCount() > 0) {
             $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-
 
 
             // 3. Transformar o resultado em objetos
@@ -79,12 +103,30 @@ class PostDaoMysql implements PostDAO {
                 . " ORDER BY created_at DESC");
         $sql->bindValue(':id_user', $id_user);
         $sql->execute();
-        
-       
+
+
 
         if ($sql->rowCount() > 0) {
             $data = $sql->fetchAll(PDO::FETCH_ASSOC);
             $array = $this->_postListToObject($data, $id_user);
+        }
+
+        return $array;
+    }
+
+    public function delPhotosFrom($id, $id_user) {
+        $array = [];
+
+        $sql = $this->pdo->prepare("SELECT type, body FROM posts"
+                . " WHERE id = :id AND id_user = :id_user AND type = 'photo'"
+                . " ORDER BY created_at DESC");
+        $sql->bindValue(':id', $id);
+        $sql->bindValue(':id_user', $id_user);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $data = $sql->fetch(PDO::FETCH_ASSOC);
+            $array = $data;
         }
 
         return $array;

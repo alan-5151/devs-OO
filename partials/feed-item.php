@@ -23,9 +23,14 @@ switch ($item->type) {
                 <br/>
                 <span class="fidi-date"><?= date('d/m/Y H:i', strtotime($item->created_at)); ?></span>
             </div>
+            <?php if ($item->mine): ?>
             <div class="feed-item-head-btn">
                 <img src="<?= $base; ?>/assets/images/more.png" />
+                <div class="feed-item-more-window">
+                    <a href="<?=$base;?>/excluir_post_action.php?id=<?=$item->id;?>">Excluir post</a>
+                </div>
             </div>
+            <?php endif; ?>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
 
@@ -63,19 +68,6 @@ switch ($item->type) {
                 <?php endforeach; ?>
 
             </div>
-
-
-            <!--div class="fic-item row m-height-10 m-width-20">
-                <div class="fic-item-photo">
-                    <a href=""><img src="media/avatars/default.jpg" /></a>
-                </div>
-                <div class="fic-item-info">
-                    <a href="">Bonieky Lacerda</a>
-                    Comentando no meu próprio post
-                </div>
-            </div //  -->
-
-
 
             <div class="fic-answer row m-height-10 m-width-20">
                 <div class="fic-item-photo">

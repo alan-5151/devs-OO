@@ -1,32 +1,25 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "123";
-$dbname = "devsbook";
+$myArray = array(
+	'nome' => 'João',
+	'sobrenome' => 'Carlos',
+	'idade' => 30,
+	'telefone' => '3345-4233'
+);
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-
-$data = date('Y-m-d H:i:s');
-
-$sql = "INSERT INTO posts (id_user, type, created_at, body)
-VALUES ($userInfo->id, 'text', '$data', '$body')";
-
-if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
-} else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-exit;
+echo 'My name is ' . $myArray['nome'] . ' ' . $myArray['sobrenome'];
+echo ' and I\'m ' . $myArray['idade'] . ' years old.';
 
 
 
-$conn->close();
-?>
+
+
+Array
+(
+    [id] => 45
+    [id_user] => 17
+    [type] => photo
+    [created_at] => 2020-09-02 10:59:56
+    [body] => 8b65fb16e68175222472d5e104b65df6.jpg
+)
+
